@@ -73,31 +73,31 @@ class Main {
   }
 
   static function runGitWithCreds(cmd,args,auth) {
-	  if(auth != null) {
+    if(auth != null) {
       var credArgs = ['-c',"credential.helper=!echo username=$GIT_USER;echo password=$GIT_PASS;true"];
-			var env = {GIT_USER:auth.user, GIT_PASS:auth.password};
-			return ChildProcess.spawnSync(cmd,credArgs.concat(args),{env:env});
-	  } else {
-			var env = {};
-		  return ChildProcess.spawnSync(cmd,args);
-		}
+      var env = {GIT_USER:auth.user, GIT_PASS:auth.password};
+      return ChildProcess.spawnSync(cmd,credArgs.concat(args),{env:env});
+    } else {
+      var env = {};
+      return ChildProcess.spawnSync(cmd,args);
+    }
   }
 
   static function clone(remote, local, auth, callback)
   {
     println('INFO: starting clone from $remote to $local');
-	  var res = runGitWithCreds("git",["clone","--quiet","--mirror",remote,local],auth);
+    var res = runGitWithCreds("git",["clone","--quiet","--mirror",remote,local],auth);
     saveHashedPassword(res, local, auth);
-		callback(res);
+    callback(res);
   }
 
   static function fetch(remote, local, auth, callback)
   {
     println('INFO: starting fetch from $remote to $local');
-	  runGitWithCreds("git",["-C",local,"remote","set-url","origin",remote],auth);
-	  var res = runGitWithCreds("git",["-C",local,"fetch","--quiet","--prune","--prune-tags"],auth);
+    runGitWithCreds("git",["-C",local,"remote","set-url","origin",remote],auth);
+    var res = runGitWithCreds("git",["-C",local,"fetch","--quiet","--prune","--prune-tags"],auth);
     saveHashedPassword(res, local, auth);
-		callback(res);
+    callback(res);
   }
 
   static function saveHashedPassword(res:ChildProcessSpawnSyncResult, local, auth) {
@@ -116,7 +116,7 @@ class Main {
     var pwInfo = passwordInfo(params.local, params.auth);
     var hashMatch = false;
     try {
-	    var pwParts = sys.io.File.getContent(pwInfo.file).split(":");
+      var pwParts = sys.io.File.getContent(pwInfo.file).split(":");
       var salt = pwParts[0];
       var hash = pwParts[1];
       hashMatch = hash == makeHash(params.auth.password, salt);
@@ -137,7 +137,7 @@ class Main {
       }
       res.end();
     }
-	}
+  }
 
   static function passwordInfo(local, auth) {
     var user = auth == null ? "@anon" : auth.user;
