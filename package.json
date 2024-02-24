@@ -25,12 +25,9 @@
     "url": "https://github.com/jonasmalacofilho/git-cache-http-server/issues"
   },
   "homepage": "https://github.com/jonasmalacofilho/git-cache-http-server#readme",
-  "devDependencies": {
-    "haxe": "^5.0.0"
-  },
   "haxeDependencies": {
-    "haxe": "4.0.5",
-    "haxelib": "4.0.2"
+    "haxe": "^4.1",
+    "haxelib": "^4.1"
   },
   "scripts": {
     "installHaxelibs": "haxelib --always install all",

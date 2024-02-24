@@ -2,6 +2,8 @@
 --main Main
 --class-path src
 --library hxnodejs
+--library random
+--library PBKDF2
 --library jmf-npm-externs:git:https://github.com/jonasmalacofilho/jmf-npm-externs.hx#master
 --macro BuildUtils.addShebang("/usr/bin/env", "node")
 --macro BuildUtils.makeExecutable()
