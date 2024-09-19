@@ -112,7 +112,7 @@ class Main {
     return PBKDF2.encode(password, salt, 1000, 128);
   }
 
-  static function authOffline(res:ServerResponse, params, callback:Bool->Void) {
+  static function authOffline(res:ServerResponse, params:Params, callback:Bool->Void) {
     var pwInfo = passwordInfo(params.local, params.auth);
     var hashMatch = false;
     try {
@@ -145,7 +145,7 @@ class Main {
     return {user:user, password:pass, file:'$local/${user}.hashedpw'};
   }
 
-  static function authenticate(res:ServerResponse, params, callback:Bool->Void)
+  static function authenticate(res:ServerResponse, params:Params, callback:Bool->Void)
   {
     println('INFO: authenticating on the upstream repo ${params.infos} timeout=${params.timeout}');
     var url = 'https://${params.repo}/info/refs?service=${params.service}';
@@ -159,6 +159,9 @@ class Main {
       switch(upRes.statusCode) {
         case 200:
           callback(false);
+	case 503:
+          println('INFO: got 503 from remote server, using offline cache if possible');
+          authOffline(res, params, callback);
         default:
           println('ERROR: error from $url, statuscode:${upRes.statusCode}');
           res.writeHead(upRes.statusCode, upRes.headers);
@@ -188,7 +191,7 @@ class Main {
   }
 
 
-  static function update(offline, params, callback)
+  static function update(offline, params:Params, callback)
   {
     var local = params.local;
     if (offline) {
